@@ -140,4 +140,18 @@ namespace Revisione2
             }
         }
     }
+
+    //public struct ModelFile
+    //{
+    //    public ModelFile(FileInfo prop_, bool stato_, bool nuovo_)
+    //    {
+    //        prop = prop_;
+    //        stato = stato_;
+    //        nuovo = nuovo_;
+    //    }
+
+    //    public FileInfo prop { get; set; }
+    //    public bool stato { get; set; }
+    //    public bool nuovo { get; set; }
+    //}
 }
