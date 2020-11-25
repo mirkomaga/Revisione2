@@ -134,10 +134,22 @@ namespace Revisione2
 
         public static void replaceFileInOldFolder(List<FileInfo> fileAggiornati, string pathOld) 
         {
+            //IDictionary<FileInfo, bool> results = new Dictionary<FileInfo, bool>();
+
             foreach (FileInfo fi in fileAggiornati)
             {
-                File.Copy(fi.FullName, pathOld + "\\" + Path.GetFileName(fi.FullName), true);
+                try
+                {
+                    File.Copy(fi.FullName, pathOld + "\\" + Path.GetFileName(fi.FullName), true);
+                    //results.Add(fi, true);
+                }
+                catch
+                {
+                    //results.Add(fi, false);
+                }
             }
+
+            //return results;
         }
     }
 
@@ -154,4 +166,5 @@ namespace Revisione2
     //    public bool stato { get; set; }
     //    public bool nuovo { get; set; }
     //}
+
 }

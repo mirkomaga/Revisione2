@@ -41,11 +41,11 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.Nome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ultimaModifica = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.analisi = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.stato = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.button4 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.analisi = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.stato = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -175,6 +175,14 @@
             this.ultimaModifica.Text = "Ultima Modifica";
             this.ultimaModifica.Width = 88;
             // 
+            // analisi
+            // 
+            this.analisi.Text = "Analisi";
+            // 
+            // stato
+            // 
+            this.stato.Text = "Stato";
+            // 
             // button4
             // 
             this.button4.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -208,14 +216,6 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Action";
             // 
-            // analisi
-            // 
-            this.analisi.Text = "Analisi";
-            // 
-            // stato
-            // 
-            this.stato.Text = "Stato";
-            // 
             // FormPrincipale
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -225,6 +225,8 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.groupBox1);
+            this.MaximumSize = new System.Drawing.Size(683, 494);
+            this.MinimumSize = new System.Drawing.Size(683, 494);
             this.Name = "FormPrincipale";
             this.Text = "Checker Folder";
             this.groupBox1.ResumeLayout(false);
