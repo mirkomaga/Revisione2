@@ -42,7 +42,7 @@ namespace Revisione2
             return path;
         }
 
-        private static void aggiornoListView(ListView lw, Button btn)
+        private static void aggiornoListView(ListView lw, IDictionary<string, bool> relazione, Button btn)
         {
             lw.Items.Clear();
             
@@ -50,14 +50,24 @@ namespace Revisione2
             {
                 foreach (FileInfo fi in fileAggiornati)
                 {
-                    string[] row = { fi.Name, fi.LastWriteTime.ToString()};
+                    string nuovo = "Nuovo";
+
+                    if (relazione.ContainsKey(fi.Name)) 
+                    {
+                        if (!relazione[fi.Name])
+                        {
+                            nuovo = "Modificato";
+                        }
+                    }
+
+                    string[] row = { fi.Name, fi.LastWriteTime.ToString(), nuovo, ""};
                     var listViewItem = new ListViewItem(row);
                     lw.Items.Add(listViewItem);
                 }
 
                 btn.Enabled = true;
 
-                lw.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                resizeColumns(lw);
 
                 // Controller.generaFolderNuoviFile(fileAggiornati);
             }
@@ -86,8 +96,13 @@ namespace Revisione2
             if (!string.IsNullOrEmpty(newFolder) && !string.IsNullOrEmpty(oldFolder))
             {
 
-                fileAggiornati = Controller.trovoRevisioniRecenti(Controller.getFolderFile(@oldFolder), Controller.getFolderFile(newFolder));
-                aggiornoListView(listView1, button4);
+                var analisi = Controller.trovoRevisioniRecenti(Controller.getFolderFile(@oldFolder), Controller.getFolderFile(@newFolder));
+
+                fileAggiornati = analisi.Item1;
+
+                IDictionary<string, bool> relazione = analisi.Item2;
+
+                aggiornoListView(listView1, relazione, button4);
             }
             else
             {
@@ -99,10 +114,31 @@ namespace Revisione2
         {
             if (fileAggiornati.Count > 0)
             {
-                Controller.replaceFileInOldFolder(fileAggiornati, oldFolder);
+                IDictionary<string, bool>  results = Controller.replaceFileInOldFolder(fileAggiornati, @oldFolder);
 
-                MessageBox.Show("Operazione Conclusa");
+                foreach (ListViewItem x in listView1.Items)
+                {
+                    if (results.ContainsKey(x.Text))
+                    {
+                        if (results[x.Text])
+                        {
+                            x.SubItems[3].Text = "Aggiornato";
+                        }
+                        else
+                        {
+                            x.SubItems[3].Text = "Non aggiornato";
+                        }
+
+                    }
+                }
+
+                resizeColumns(listView1);
             }
+        }
+
+        private static void resizeColumns(ListView lw)
+        {
+            lw.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
     }
 }

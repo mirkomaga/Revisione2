@@ -25,7 +25,6 @@ namespace Revisione2
 
             return fileInfoList;
         }
-
         public static List<FileInfo> getMostUpdated(List<FileInfo> list)
         {
             IDictionary<string, List<FileInfo>> tmpDict = new Dictionary<string, List<FileInfo>>();
@@ -60,11 +59,10 @@ namespace Revisione2
             return fileRecenti;
             ;
         }
-
-        public static List<FileInfo> trovoRevisioniRecenti(List<FileInfo> listaOld, List<FileInfo> listaNew)
+        public static (List<FileInfo>, IDictionary<string, bool>) trovoRevisioniRecenti(List<FileInfo> listaOld, List<FileInfo> listaNew)
         {
             List<FileInfo> fileAggiornati = new List<FileInfo>();
-            List<FileInfo> fileNuovi = new List<FileInfo>();
+            IDictionary<string, bool> riferimento = new Dictionary<string, bool>();
 
             // ? PER OGNI FILE CON LO STESSO NOME PRENDERE IL PIU RECENTE
             listaNew = getMostUpdated(listaNew);
@@ -81,21 +79,40 @@ namespace Revisione2
                     if (fInfoOld.LastWriteTime < fInfoNew.LastWriteTime)
                     {
                         // ? IL FILE E' STATO AGGIORNATO
-                        //fInfoNew.Attributes.Nuovo = false;
                         fileAggiornati.Add(fInfoNew);
+                        riferimento.Add(fInfoNew.Name, false);
                     }
                 }
                 else
                 {
                     // ? IL FILE E' NUOVO
-                    //fInfoNew.Attributes.Nuovo = true;
                     fileAggiornati.Add(fInfoNew);
+                    riferimento.Add(fInfoNew.Name, true);
                 }
             }
 
-            return fileAggiornati;
+            return (fileAggiornati, riferimento);
         }
+        public static IDictionary<string, bool> replaceFileInOldFolder(List<FileInfo> fileAggiornati, string pathOld)
+        {
 
+            IDictionary<string, bool> results = new Dictionary<string, bool>();
+
+            foreach (FileInfo fi in fileAggiornati)
+            {
+                try
+                {
+                    File.Copy(fi.FullName, pathOld + "\\" + Path.GetFileName(fi.FullName), true);
+                    results.Add(Path.GetFileName(fi.FullName), true);
+                }
+                catch
+                {
+                    results.Add(Path.GetFileName(fi.FullName), false);
+                }
+            }
+
+            return results;
+        }
         public static void generaFolderNuoviFile(List<FileInfo> fileAggiornati)
         {
             string path = creaFolder();
@@ -113,7 +130,6 @@ namespace Revisione2
                 MessageBox.Show("File salvato in: " + path);
             }
         }
-
         public static string creaFolder()
         {
             try
@@ -131,40 +147,6 @@ namespace Revisione2
 
             return "";
         }
-
-        public static void replaceFileInOldFolder(List<FileInfo> fileAggiornati, string pathOld) 
-        {
-            //IDictionary<FileInfo, bool> results = new Dictionary<FileInfo, bool>();
-
-            foreach (FileInfo fi in fileAggiornati)
-            {
-                try
-                {
-                    File.Copy(fi.FullName, pathOld + "\\" + Path.GetFileName(fi.FullName), true);
-                    //results.Add(fi, true);
-                }
-                catch
-                {
-                    //results.Add(fi, false);
-                }
-            }
-
-            //return results;
-        }
     }
-
-    //public struct ModelFile
-    //{
-    //    public ModelFile(FileInfo prop_, bool stato_, bool nuovo_)
-    //    {
-    //        prop = prop_;
-    //        stato = stato_;
-    //        nuovo = nuovo_;
-    //    }
-
-    //    public FileInfo prop { get; set; }
-    //    public bool stato { get; set; }
-    //    public bool nuovo { get; set; }
-    //}
 
 }
